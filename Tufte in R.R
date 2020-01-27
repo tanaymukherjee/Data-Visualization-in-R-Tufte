@@ -2,7 +2,7 @@
 # 26th Jan, 2020
 
 # install.packages(c("CarletonStats", "devtools", "epanetReader", "fmsb", "ggplot2", "ggthemes", 
-#                    "latticeExtra", "MASS", "PerformanceAnalytics", "psych", 
+#                    "latticeExtra", "MASS", "PerformanceAnalytics", "psych", "highcharter", "digest",
 #                    "plyr", "prettyR", "plotrix", "proto", "RCurl", "reshape", "reshape2"))
 
 
