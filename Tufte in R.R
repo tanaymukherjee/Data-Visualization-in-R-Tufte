@@ -1,3 +1,6 @@
+# Tanay Mukherjee
+# 26th Jan, 2020
+
 # install.packages(c("CarletonStats", "devtools", "epanetReader", "fmsb", "ggplot2", "ggthemes", 
 #                    "latticeExtra", "MASS", "PerformanceAnalytics", "psych", 
 #                    "plyr", "prettyR", "plotrix", "proto", "RCurl", "reshape", "reshape2"))
@@ -119,3 +122,79 @@ qfplot(x=mtcars$wt, y=mtcars$mpg, xlab="Car weight (lb/1000)", ylab="Miles per g
 
 
 # Dot-dash (or rug) scatterplot
+
+# Dot-dash plot in base graphics with fancyaxis
+# library(devtools)
+# source_url("https://raw.githubusercontent.com/sjmurdoch/fancyaxis/master/fancyaxis.R")
+# x <- mtcars$wt
+# y <- mtcars$mpg
+# plot(x, y, main="", axes=FALSE, pch=16, cex=0.8,
+# xlab="Car weight (lb/1000)", ylab="Miles per gallon of fuel", 
+# xlim=c(min(x)-0.2, max(x)+0.2),
+# ylim=c(min(y)-1.5, max(y)+1.5))
+# axis(1, tick=F)
+# axis(2, tick=F, las=2)
+# minimalrug(x, side=1, line=-0.8)
+# minimalrug(y, side=2, line=-0.8)
+
+# Dot-dash plot in lattice
+library(lattice)
+x <- mtcars$wt
+y <- mtcars$mpg
+xyplot(y ~ x, xlab="Car weight (lb/1000)", ylab="Miles per gallon of fuel",
+       par.settings = list(axis.line = list(col="transparent")),
+       panel = function(x, y,...) { 
+         panel.xyplot(x, y, col=1, pch=16)
+         panel.rug(x, y, col=1, x.units = rep("snpc", 2), y.units = rep("snpc", 2), ...)})
+
+
+# Dot-dash plot in ggplot2
+library(ggplot2)
+library(ggthemes)
+ggplot(mtcars, aes(wt, mpg)) + geom_point() + geom_rug() + theme_tufte(ticks=F) + 
+  xlab("Car weight (lb/1000)") + ylab("Miles per gallon of fuel") + 
+  theme(axis.title.x = element_text(vjust=-0.5), axis.title.y = element_text(vjust=1))
+
+
+# Marginal histogram scatterplot
+
+#Marginal histogram scatterplot in base graphics with fancyaxis
+
+library(devtools)
+source_url("https://raw.githubusercontent.com/sjmurdoch/fancyaxis/master/fancyaxis.R")
+x <- faithful$waiting
+y <- faithful$eruptions
+plot(x, y, main="", axes=FALSE, pch=16, cex=0.8,
+     xlab="Time till next eruption (min)", ylab="Duration (sec)", 
+     xlim=c(min(x)/1.1, max(x)), ylim=c(min(y)/1.5, max(y)))
+axis(1, tick=F)
+axis(2, tick=F, las=2)
+axisstripchart(faithful$waiting, 1)
+axisstripchart(faithful$eruptions, 2)
+
+
+# Marginal histogram scatterplot in ggplot2 with ggMarginal
+library(ggplot2)
+library(ggExtra)
+library(ggthemes)
+p <- ggplot(faithful, aes(waiting, eruptions)) + geom_point() + theme_tufte(ticks=F)
+ggMarginal(p, type = "histogram", fill="transparent")
+
+# However, ggMarginal can be also used to quickly create
+# margin densityplots using the same function:
+
+library(ggplot2)
+library(ggExtra)
+library(ggthemes)
+p <- ggplot(faithful, aes(waiting, eruptions)) + geom_point() + theme_tufte(ticks=F) +
+  theme(axis.title=element_blank(), axis.text=element_blank())
+ggMarginal(p, type = "density")
+
+# can also be used to create margin boxplots:
+library(ggplot2)
+library(ggExtra)
+library(ggthemes)
+p <- ggplot(faithful, aes(waiting, eruptions)) + geom_point() + theme_tufte(ticks=F) +
+  theme(axis.title=element_blank(), axis.text=element_blank())
+ggMarginal(p, type = "boxplot", size=10, fill="transparent")
+
